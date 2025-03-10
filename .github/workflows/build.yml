@@ -14,3 +14,16 @@ jobs:
                node-version: 20
             - name: try_npm
               run: npm -v
+            
+            - name: pwd
+              run: pwd
+            - name: ls
+              run: ls
+
+            - name: install_11ty
+              run: npm install --save-dev @11ty/eleventy
+            - name: build_web
+              run: npx @11ty/eleventy
+              
+            - name: ls
+              run: ls
