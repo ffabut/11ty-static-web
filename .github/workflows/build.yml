@@ -24,6 +24,8 @@ jobs:
               run: npm install --save-dev @11ty/eleventy
             - name: build_web
               run: npx @11ty/eleventy
-              
+
             - name: ls
               run: ls
+            - name: ls_site
+              run: ls _site
