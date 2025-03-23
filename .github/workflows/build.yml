@@ -1,37 +1,25 @@
 name: build
-on:
-    push:
-        branches: [ main ]
 
+on:
+  push: #Workflow ma bezet pri pushi do main branche
+    branches: [ main ]
+  pull_request: #A take pri pull requestu (ale pak skipneme deployment)
 
 jobs:
-    build_web:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-               node-version: 20
-            - name: try_npm
-              run: npm -v
-            
-            - name: pwd
-              run: pwd
-            - name: ls
-              run: ls
-
-            - name: install_11ty
-              run: npm install --save-dev @11ty/eleventy
-            - name: build_web
-              run: npx @11ty/eleventy
-
-            - name: ls
-              run: ls
-            - name: ls_site
-              run: ls _site
-
-            - name: Deploy
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                github_token: ${{ secrets.GITHUB_TOKEN }}
-                publish_dir: _site
+  build_web: # definujeme jediny job
+    runs-on: ubuntu-latest # na jakem virtualnim pocitaci job bezi
+    steps:
+    - uses: actions/checkout@v4 # git clone
+    - uses: actions/setup-node@v4 # instalace nodejs
+      with:
+        node-version: 20
+    - name: install_11ty # instalace 11ty
+      run: npm install --save-dev @11ty/eleventy
+    - name: build_web
+      run: npx @11ty/eleventy
+    - name: Deployment 
+      if: github.ref == 'refs/heads/main' # Deploy jen pri pushi do main branche
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: _site
